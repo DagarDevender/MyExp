@@ -1,0 +1,1 @@
+{"name":"My Monthly Expense Manager","short_name":"My Expenses","start_url":"./","display":"standalone","background_color":"#f5f7fa","theme_color":"#102a43","description":"Manage monthly bills, EMIs and payments privately on your device.","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}

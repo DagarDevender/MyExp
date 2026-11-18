@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102a43"><meta name="description" content="Private monthly expense manager with offline storage and backup.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>My Monthly Expenses</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar"><div class="brand"><div class="brandmark">₹</div><div><b>My Expenses</b><small>Personal finance, made simple</small></div></div><button id="installBtn" class="ghost hidden">Install app</button></header>
+<main>
+<section class="monthline"><div><span class="eyebrow">YOUR FINANCES</span><h1 id="monthTitle">November 2026</h1></div><input id="monthPicker" type="month" aria-label="Select month"></section>
+<section class="stats">
+ <article class="stat dark"><span>Total commitments</span><strong id="totalAmount">₹0</strong><small>Planned this month</small></article>
+ <article class="stat"><span>Paid</span><strong id="paidAmount">₹0</strong><small id="paidCount">0 payments completed</small></article>
+ <article class="stat"><span>Pending</span><strong id="pendingAmount">₹0</strong><small id="pendingCount">0 payments remaining</small></article>
+ <article class="stat income-stat"><span>Monthly income</span><strong id="incomeAmount">₹0</strong><small>Income recorded this month</small></article>
+ <article class="stat savings-stat"><span>Balance after expenses</span><strong id="balanceAmount">₹0</strong><small>Income minus paid expenses</small></article>
+</section>
+<section class="progress-card"><div class="progress-head"><b>Monthly progress</b><strong id="progressText">0%</strong></div><div class="track"><div id="progressBar"></div></div><div class="progress-foot"><span id="progressCaption">Let's get started</span><span id="itemCount">0 expenses</span></div></section>
+<nav class="tabs" aria-label="Sections"><button class="tab active" data-tab="expenses">Expenses</button><button class="tab" data-tab="income">Income</button><button class="tab" data-tab="calendar">Due dates</button><button class="tab" data-tab="compare">Compare</button><button class="tab" data-tab="backup">Backup</button></nav>
+<section id="expensesPanel" class="panel">
+ <div class="section-head"><div><h2>Monthly expenses</h2><p>Mark each item when you pay it.</p></div><button id="addBtn" class="primary">＋ Add expense</button></div>
+ <div class="filters"><input id="searchInput" placeholder="Search expenses…" aria-label="Search expenses"><select id="statusFilter"><option value="all">All statuses</option><option value="pending">Pending</option><option value="paid">Paid</option></select><select id="categoryFilter"><option value="all">All categories</option></select></div>
+ <div id="expenseList" class="expense-list"></div>
+ <div id="emptyState" class="empty hidden"><div>🧾</div><b>No expenses found</b><p>Add your first expense or change the filters.</p></div>
+</section>
+<section id="incomePanel" class="panel hidden"><div class="section-head"><div><h2>Monthly income</h2><p>Record salary, business income or any other receipts.</p></div><button id="addIncomeBtn" class="primary">＋ Add income</button></div><div id="incomeList" class="expense-list"></div><div id="incomeEmpty" class="empty hidden">💰<b>No income recorded</b><p>Add your monthly income sources here.</p></div></section>
+<section id="calendarPanel" class="panel hidden"><div class="section-head"><div><h2>Upcoming payments</h2><p>Pending expenses ordered by due date.</p></div><button id="reminderBtn" class="secondary">Enable reminders</button></div><div id="dueList" class="expense-list"></div></section>
+<section id="comparePanel" class="panel hidden"><div class="section-head"><div><h2>Monthly comparison</h2><p>Compare income, expenses and monthly balance.</p></div></div><div id="compareList" class="compare-list"></div></section>
+<section id="backupPanel" class="panel hidden"><div class="section-head"><div><h2>Backup & restore</h2><p>Your records stay on this device. Keep a backup safe.</p></div></div>
+ <div class="backup-card"><div class="backup-icon">↓</div><div><b>Download full backup</b><p>Save all income, expenses, payment statuses and month history as a JSON file.</p><button id="backupBtn" class="primary">Download backup</button></div></div>
+ <div class="backup-card"><div class="backup-icon">↑</div><div><b>Restore from backup</b><p>Choose a backup JSON file. Restoring replaces the current app data on this device.</p><label class="primary file-btn">Choose backup<input id="restoreInput" type="file" accept=".json,application/json"></label></div></div>
+ <div class="backup-card"><div class="backup-icon">▦</div><div><b>Export for Excel</b><p>Download selected month income and expenses as a CSV file that opens in Excel.</p><button id="exportBtn" class="secondary">Export monthly CSV</button></div></div>
+ <div class="note">Tip: Download a backup before changing phones, clearing browser data or reinstalling the app. Device-only data does not automatically sync between devices.</div>
+</section>
+</main>
+<footer><span>Private by design · Stored on this device</span><button id="settingsBtn" class="text-btn">Manage expense list</button></footer>
+<dialog id="expenseDialog"><form id="expenseForm" method="dialog"><div class="dialog-head"><div><span class="eyebrow">EXPENSE DETAILS</span><h2 id="dialogTitle">Add expense</h2></div><button type="button" class="close" data-close>×</button></div>
+<input type="hidden" id="expenseId"><label>Expense name<input id="expenseName" required maxlength="60" placeholder="e.g. Electricity bill"></label>
+<div class="form-row"><label>Category<select id="expenseCategory"><option>Education</option><option>Loans</option><option>Committee</option><option>Utilities</option><option>Credit Cards</option><option>Other</option></select></label><label>Monthly amount (₹)<input id="expenseAmount" type="number" min="0" step="0.01" required placeholder="0"></label></div>
+<div class="form-row"><label>Due day<input id="expenseDue" type="number" min="1" max="31" placeholder="e.g. 5"></label><label>Starts from<input id="expenseStart" type="month"></label></div>
+<label class="checkline"><input id="expenseRecurring" type="checkbox" checked> Repeat every month</label>
+<div class="dialog-actions"><button type="button" class="secondary" data-close>Cancel</button><button class="primary" type="submit">Save expense</button></div></form></dialog>
+<dialog id="incomeDialog"><form id="incomeForm" method="dialog"><div class="dialog-head"><div><span class="eyebrow">INCOME DETAILS</span><h2>Add monthly income</h2></div><button type="button" class="close" data-close>×</button></div><label>Income source<input id="incomeName" required maxlength="60" placeholder="e.g. Monthly salary"></label><div class="form-row"><label>Amount (₹)<input id="incomeValue" type="number" min="0" step="0.01" required placeholder="0"></label><label>Date received<input id="incomeDate" type="date"></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close>Cancel</button><button class="primary" type="submit">Save income</button></div></form></dialog>\n<dialog id="manageDialog"><form id="manageForm" method="dialog"><div class="dialog-head"><div><span class="eyebrow">SETUP</span><h2>Manage expenses</h2></div><button type="button" class="close" data-close>×</button></div><p class="muted">Edit or remove an expense template. Removing a template does not erase earlier monthly records.</p><div id="manageList"></div><div class="dialog-actions"><button type="button" class="secondary" data-close>Done</button></div></form></dialog>
+<div id="toast" role="status" class="toast"></div>
+<script src="app.js"></script>
+</body></html>
